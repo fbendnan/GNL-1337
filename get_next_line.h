@@ -2,12 +2,13 @@
 # define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 10
+# define BUFFER_SIZE 3
 #endif
 
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include <fcntl.h>
 
 void read_buffer(int fd, char **storage);
 

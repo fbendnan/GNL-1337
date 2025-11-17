@@ -16,14 +16,23 @@ char	*extract_line(char **storage)
 {
     char    *line;
 	char	*newline_p;
+	char	*rest;
+	int		len_line;
 
-	newline_p = ft_strchr(*storage, '\n') + 1;
-	newline_p = ft_substr(newline_p, 0, ft_strlen(newline_p));
-	line = ft_substr(*storage, 0, (ft_strlen(*storage) - ft_strlen(newline_p)) + 1);
+	newline_p = ft_strchr(*storage, '\n');
+	if(!newline_p)
+	{
+		line = ft_strdup(*storage);
+		free(*storage);
+		*storage = NULL;
+		return (line);
+	}
+	len_line = newline_p - *storage + 1;
+	line = ft_substr(*storage, 0, len_line);
+	rest = ft_substr(*storage, len_line, (ft_strlen(*storage) - len_line));
 	free(*storage);
-	*storage = NULL;
-	*storage = ft_strdup(newline_p);
-	free(newline_p);
+	*storage = rest;
+	free(rest);
 	return (line);
 }
 
@@ -36,14 +45,13 @@ void    read_buffer(int fd, char **storage)
 	if (ft_strchr(*storage, '\n'))
 		return;
 	read_return = read(fd, buffer, BUFFER_SIZE);
-	while (read_return && !ft_strchr(*buffer, '\n'))
+	while (read_return && !ft_strchr(buffer, '\n'))
 	{
 		tmp_line = ft_strjoin(*storage, buffer);
 		*storage = ft_strdup(tmp_line);
 		read_return = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(tmp_line);
-	free(buffer);
 }
 
 char	*get_next_line(int fd)
@@ -55,7 +63,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if(!storage)
 		storage = ft_strdup("");
-	read_buffer(fd, *storage);
-	line = extract_line(*storage);
+	read_buffer(fd, &storage);
+	line = extract_line(&storage);
 	return (line);
 }
