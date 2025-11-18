@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/17 15:49:33 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:44:46 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*extract_line(char **storage)
 	return (line);
 }
 
-void    read_buffer(int fd, char **storage)
+void	read_buffer_and_fill_storage(int fd, char **storage)
 {
 	char	*tmp_line;
 	char	buffer[BUFFER_SIZE];
@@ -47,8 +47,9 @@ void    read_buffer(int fd, char **storage)
 	read_return = read(fd, buffer, BUFFER_SIZE);
 	while (read_return && !ft_strchr(buffer, '\n'))
 	{
+		free(tmp_line);
 		tmp_line = ft_strjoin(*storage, buffer);
-		*storage = ft_strdup(tmp_line);
+		*storage = tmp_line;
 		read_return = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(tmp_line);
@@ -63,7 +64,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if(!storage)
 		storage = ft_strdup("");
-	read_buffer(fd, &storage);
+	read_buffer_and_fill_storage(fd, &storage);
 	line = extract_line(&storage);
 	return (line);
 }

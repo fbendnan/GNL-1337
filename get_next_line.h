@@ -10,7 +10,7 @@
 # include <unistd.h>
 #include <fcntl.h>
 
-void read_buffer(int fd, char **storage);
+void read_buffer_and_fill_storage(int fd, char **storage);
 
 char *get_next_line(int fd);
 size_t	ft_strlen(const char *str);
