@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/18 15:44:46 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:26:37 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ char	*extract_line(char **storage)
 	int		len_line;
 
 	newline_p = ft_strchr(*storage, '\n');
-	if(!newline_p)
-	{
-		line = ft_strdup(*storage);
-		free(*storage);
-		*storage = NULL;
-		return (line);
-	}
+	// if(!newline_p)
+	// {
+	// 	line = ft_strdup(*storage);
+	// 	free(*storage);
+	// 	*storage = NULL;
+	// 	return (line);
+	// }
 	len_line = newline_p - *storage + 1;
 	line = ft_substr(*storage, 0, len_line);
 	rest = ft_substr(*storage, len_line, (ft_strlen(*storage) - len_line));
@@ -47,12 +47,11 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 	read_return = read(fd, buffer, BUFFER_SIZE);
 	while (read_return && !ft_strchr(buffer, '\n'))
 	{
-		free(tmp_line);
 		tmp_line = ft_strjoin(*storage, buffer);
 		*storage = tmp_line;
 		read_return = read(fd, buffer, BUFFER_SIZE);
 	}
-	free(tmp_line);
+	// free(tmp_line);
 }
 
 char	*get_next_line(int fd)

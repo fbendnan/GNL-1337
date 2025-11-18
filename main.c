@@ -4,8 +4,8 @@
 int main()
 {
     int fd = open("text.txt", O_RDWR);
+    // printf("%d", fd);
 
-    write(fd, "helllooo\n", 8);
     char   *str = get_next_line(fd);
     printf("%s", str);
 }
