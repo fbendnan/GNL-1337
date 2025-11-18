@@ -7,5 +7,5 @@ int main()
     // printf("%d", fd);
 
     char   *str = get_next_line(fd);
-    printf("%s", str);
+    printf("%s\n", str);
 }
