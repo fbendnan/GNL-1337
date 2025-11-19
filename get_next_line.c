@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/19 15:23:05 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/19 21:41:49 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 char	*extract_line(char **storage)
 {
-    char    *line;
+    char	*line;
 	char	*newline_p;
 	char	*rest;
 	int		len_line;
 
 	newline_p = ft_strchr(*storage, '\n');
-	if(!newline_p)
+	if (!newline_p)
 	{
 		line = ft_strdup(*storage);
 		free(*storage);
@@ -38,9 +38,10 @@ char	*extract_line(char **storage)
 void	read_buffer_and_fill_storage(int fd, char **storage)
 {
 	char	*tmp_line;
-	char	buffer[BUFFER_SIZE + 1];
+	char	*buffer;
 	int		read_return;
 
+	buffer = malloc(BUFFER_SIZE + 1);
 	if (ft_strchr(*storage, '\n'))
 		return;
 	tmp_line = "";
@@ -51,6 +52,7 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 		free(*storage);
 		*storage = tmp_line;
 	}
+	free(buffer);
 }
 
 char	*get_next_line(int fd)
