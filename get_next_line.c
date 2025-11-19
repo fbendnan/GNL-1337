@@ -6,12 +6,11 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/19 08:18:51 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:23:05 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h> //////
 
 char	*extract_line(char **storage)
 {
@@ -29,14 +28,8 @@ char	*extract_line(char **storage)
 		return (line);
 	}
 	len_line = newline_p - *storage + 1;
-	// //////
-	// printf("len line = %d\n",len_line);
 	line = ft_substr(*storage, 0, len_line);
-	////
-	// printf("line = %s\n",line);
 	rest = ft_substr(*storage, len_line, (ft_strlen(*storage) - len_line));
-	// ////////
-	// printf("rest = %s\n",rest);
 	free(*storage);
 	*storage = rest;
 	return (line);
@@ -50,7 +43,7 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 
 	if (ft_strchr(*storage, '\n'))
 		return;
-	tmp_line = ft_strdup("");
+	tmp_line = "";
 	while (!ft_strchr(*storage, '\n') && (read_return = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[read_return] = '\0';
@@ -77,7 +70,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	line = extract_line(&storage);
-	/////
-	// printf("storage after extract line = %s", storage);
 	return (line);
 }
