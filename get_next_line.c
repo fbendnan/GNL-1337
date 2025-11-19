@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/18 16:26:37 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/19 08:18:51 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,16 @@ char	*extract_line(char **storage)
 		return (line);
 	}
 	len_line = newline_p - *storage + 1;
-	//////
-	printf("len line = %d\n",len_line);
+	// //////
+	// printf("len line = %d\n",len_line);
 	line = ft_substr(*storage, 0, len_line);
 	////
-	printf("line = %s\n",line);
+	// printf("line = %s\n",line);
 	rest = ft_substr(*storage, len_line, (ft_strlen(*storage) - len_line));
-	////////
-	printf("rest = %s\n",rest);
+	// ////////
+	// printf("rest = %s\n",rest);
 	free(*storage);
-	*storage = ft_strdup(rest);
-	free(rest);
+	*storage = rest;
 	return (line);
 }
 
@@ -55,12 +54,10 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 	while (!ft_strchr(*storage, '\n') && (read_return = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[read_return] = '\0';
-		free(tmp_line);
 		tmp_line = ft_strjoin(*storage, buffer);
 		free(*storage);
-		*storage = ft_strdup(tmp_line);
+		*storage = tmp_line;
 	}
-	free(tmp_line);
 }
 
 char	*get_next_line(int fd)
@@ -80,6 +77,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	line = extract_line(&storage);
-	printf("storage after extract line = %s", storage);
+	/////
+	// printf("storage after extract line = %s", storage);
 	return (line);
 }
