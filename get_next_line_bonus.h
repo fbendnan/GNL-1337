@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 08:03:16 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/20 09:15:29 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:27:28 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 3
+#  define BUFFER_SIZE 8
 # endif
 
 # include <stdint.h>

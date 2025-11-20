@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 08:03:44 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/20 09:16:52 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:26:07 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	len_s = ft_strlen(s);
-	if (start >= len_s)
+	if (start >= len_s || len == 0)
 		return (ft_strdup(""));
 	if (len > len_s - start)
 		len = len_s - start;
@@ -83,25 +83,6 @@ char	*ft_strchr(const char *s, int c)
 	if ((char)c == '\0')
 		return ((char *)s);
 	return (NULL);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	if (!dst || !src)
-		return (0);
-	if (size != 0)
-	{
-		while (src[i] && (i < size -1))
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (ft_strlen(src));
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
