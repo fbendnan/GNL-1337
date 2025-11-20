@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 10:38:17 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/19 21:41:49 by fbendnan         ###   ########.fr       */
+/*   Created: 2025/11/20 08:03:36 by fbendnan          #+#    #+#             */
+/*   Updated: 2025/11/20 09:16:44 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*extract_line(char **storage)
 {
-    char	*line;
+	char	*line;
 	char	*newline_p;
 	char	*rest;
 	int		len_line;
@@ -43,26 +43,28 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (ft_strchr(*storage, '\n'))
-		return;
+		return ;
 	tmp_line = "";
-	while (!ft_strchr(*storage, '\n') && (read_return = read(fd, buffer, BUFFER_SIZE)) > 0)
+	read_return = read(fd, buffer, BUFFER_SIZE);
+	while (!ft_strchr(*storage, '\n') && read_return > 0)
 	{
 		buffer[read_return] = '\0';
 		tmp_line = ft_strjoin(*storage, buffer);
 		free(*storage);
 		*storage = tmp_line;
+		read_return = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *storage;
-	char	*line;
+	static char	*storage;
+	char		*line;
 
 	if (fd == -1)
 		return (NULL);
-	if(!storage)
+	if (!storage)
 		storage = ft_strdup("");
 	read_buffer_and_fill_storage(fd, &storage);
 	if (!storage || storage[0] == '\0')

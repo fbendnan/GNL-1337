@@ -1,14 +1,26 @@
-#include "get_next_line_bonus.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/20 08:03:21 by fbendnan          #+#    #+#             */
+/*   Updated: 2025/11/20 09:17:07 by fbendnan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 
 char	*extract_line(char **storage)
 {
-    char    *line;
+	char	*line;
 	char	*newline_p;
 	char	*rest;
 	int		len_line;
 
 	newline_p = ft_strchr(*storage, '\n');
-	if(!newline_p)
+	if (!newline_p)
 	{
 		line = ft_strdup(*storage);
 		free(*storage);
@@ -31,26 +43,28 @@ void	read_buffer_and_fill_storage(int fd, char **storage)
 
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (ft_strchr(*storage, '\n'))
-		return;
+		return ;
 	tmp_line = "";
-	while (!ft_strchr(*storage, '\n') && (read_return = read(fd, buffer, BUFFER_SIZE)) > 0)
+	read_return = read(fd, buffer, BUFFER_SIZE);
+	while (!ft_strchr(*storage, '\n') && read_return > 0)
 	{
 		buffer[read_return] = '\0';
 		tmp_line = ft_strjoin(*storage, buffer);
 		free(*storage);
 		*storage = tmp_line;
+		read_return = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *storage[1024];
-	char	*line;
+	static char	*storage[1024];
+	char		*line;
 
 	if (fd == -1)
 		return (NULL);
-	if(!storage[fd])
+	if (!storage[fd])
 		storage[fd] = ft_strdup("");
 	read_buffer_and_fill_storage(fd, &storage[fd]);
 	if (!storage[fd] || storage[fd][0] == '\0')
