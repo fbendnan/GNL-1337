@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 08:03:08 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/20 12:22:04 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/23 12:49:29 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,45 @@ char	*ft_strchr(const char *s, int c)
 	if ((char)c == '\0')
 		return ((char *)s);
 	return (NULL);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	str_len;
+	size_t	i;
+	char	*s_cpy;
+
+	i = 0;
+	str_len = ft_strlen(s);
+	s_cpy = malloc(str_len + 1);
+	if (!s_cpy)
+		return (NULL);
+	while ((str_len > i) && s[i])
+	{
+		s_cpy[i] = s[i];
+		i++;
+	}
+	s_cpy[i] = '\0';
+	return (s_cpy);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (!dst || !src)
+		return (0);
+	if (size != 0)
+	{
+		while (src[i] && (i < size -1))
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = '\0';
+	}
+	return (ft_strlen(src));
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
