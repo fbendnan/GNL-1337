@@ -6,7 +6,7 @@
 /*   By: fbendnan <fbendnan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 08:03:21 by fbendnan          #+#    #+#             */
-/*   Updated: 2025/11/23 15:13:40 by fbendnan         ###   ########.fr       */
+/*   Updated: 2025/11/23 15:20:10 by fbendnan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*safe_join_free(char *s1, char *s2)
 	return (free(s1), (tmp));
 }
 
-static char	*read_buffer_and_fill_storage(int fd, char *storage)
+static char	*read_buffer_to_fill_storage(int fd, char *storage)
 {
 	char	*buffer;
 	ssize_t	read_bytes;
@@ -112,7 +112,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (!storage[fd])
 		storage[fd] = NULL;
-	storage[fd] = read_buffer_and_fill_storage(fd, storage[fd]);
+	storage[fd] = read_buffer_to_fill_storage(fd, storage[fd]);
 	if (!storage[fd])
 		return (NULL);
 	line = extract_line(storage[fd]);
