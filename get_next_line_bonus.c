@@ -12,87 +12,108 @@
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+static char *safe_join_free(char *s1, char *s2)
 {
-	size_t	i;
+	char *tmp = ft_strjoin(s1, s2);
+	if (!tmp)
+        return (free(s1), (NULL));
+	return (free(s1), (tmp));
+}
+
+static char *read_buffer_and_fill_storage(int fd, char *storage)
+{
+    char    *buffer;
+    ssize_t read_bytes;
+
+    buffer = malloc(BUFFER_SIZE + 1);
+    if (!buffer)
+        return (NULL);
+    read_bytes = 1;
+    while (read_bytes > 0 && (!storage || !ft_strchr(storage, '\n')))
+    {
+        read_bytes = read(fd, buffer, BUFFER_SIZE);
+        if (read_bytes < 0)
+        {
+            free(buffer);
+            free(storage);
+            return (NULL);
+        }
+        if (read_bytes == 0)
+            break;
+
+        buffer[read_bytes] = '\0';
+        storage = safe_join_free(storage, buffer);
+        if (!storage)
+            return (free(buffer), (NULL));
+    }
+    return (free(buffer), (storage));
+}
+
+static char *extract_line(char *storage)
+{
+    int     i;
+    char    *line;
 
 	i = 0;
-	if (!dst || !src)
-		return (0);
-	if (size != 0)
-	{
-		while (src[i] && (i < size -1))
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (ft_strlen(src));
+    if (!storage || !storage[0])
+        return (NULL);
+    while (storage[i] && storage[i] != '\n')
+        i++;
+	if (storage[i] == '\n')
+		line = malloc(i + 2);
+	else
+		line = malloc(i + 1);
+    if (!line)
+        return (NULL);
+    i = 0;
+    while (storage[i] && storage[i] != '\n')
+    {
+        line[i] = storage[i];
+        i++;
+    }
+    if (storage[i] == '\n')
+        line[i++] = '\n';
+    line[i] = '\0';
+    return (line);
 }
 
-char	*extract_line(char **storage)
+static char *extract_rest(char *storage)
 {
-	char	*line;
-	char	*newline_p;
-	char	*rest;
-	int		len_line;
+    int     i;
+    int     j;
+    char    *rest;
 
-	newline_p = ft_strchr(*storage, '\n');
-	if (!newline_p)
-	{
-		line = ft_strdup(*storage);
-		free(*storage);
-		*storage = NULL;
-		return (line);
-	}
-	len_line = newline_p - *storage + 1;
-	line = ft_substr(*storage, 0, len_line);
-	rest = ft_substr(*storage, len_line, (ft_strlen(*storage) - len_line));
-	free(*storage);
-	*storage = rest;
-	return (line);
+	i = 0;
+    if (!storage)
+        return (NULL);
+    while (storage[i] && storage[i] != '\n')
+        i++;
+    if (!storage[i])
+        return (free(storage), (NULL));
+    rest = malloc(ft_strlen(storage) - i);
+    if (!rest)
+        return (free(storage), (NULL));
+    i++;
+    j = 0;
+    while (storage[i])
+        rest[j++] = storage[i++];
+    rest[j] = '\0';
+    return (free(storage), (rest));
 }
 
-void	read_buffer_and_fill_storage(int fd, char **storage)
+char *get_next_line(int fd)
 {
-	char	*tmp_line;
-	char	*buffer;
-	int		read_return;
+	static char *storage[1024];
+    char        *line;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (ft_strchr(*storage, '\n'))
-		return ;
-	read_return = 1;
-	while (!ft_strchr(*storage, '\n') && read_return > 0)
-	{
-		read_return = read(fd, buffer, BUFFER_SIZE);
-		if (read_return <= 0)
-			break ;
-		buffer[read_return] = '\0';
-		tmp_line = ft_strjoin(*storage, buffer);
-		free(*storage);
-		*storage = tmp_line;
-	}
-	free(buffer);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*storage[1024];
-	char		*line;
-
-	if (fd == -1)
-		return (NULL);
-	if (!storage[fd])
-		storage[fd] = ft_strdup("");
-	read_buffer_and_fill_storage(fd, &storage[fd]);
-	if (!storage[fd] || storage[fd][0] == '\0')
-	{
-		free(storage[fd]);
-		storage[fd] = NULL;
-		return (NULL);
-	}
-	line = extract_line(&storage[fd]);
-	return (line);
+    if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
+        return (NULL);
+    if (!storage[fd])
+        storage[fd] = NULL;
+    storage[fd] = read_buffer_and_fill_storage(fd, storage[fd]);
+    if (!storage[fd])
+        return (NULL);
+    line = extract_line(storage[fd]);
+    storage[fd] = extract_rest(storage[fd]);
+    return (line);
 }

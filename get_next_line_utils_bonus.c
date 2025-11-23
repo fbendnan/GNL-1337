@@ -26,52 +26,6 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
-{
-	size_t	str_len;
-	size_t	i;
-	char	*s_cpy;
-
-	i = 0;
-	str_len = ft_strlen(s);
-	s_cpy = malloc(str_len + 1);
-	if (!s_cpy)
-		return (NULL);
-	while ((str_len > i) && s[i])
-	{
-		s_cpy[i] = s[i];
-		i++;
-	}
-	s_cpy[i] = '\0';
-	return (s_cpy);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	i;
-	size_t	len_s;
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	len_s = ft_strlen(s);
-	if (start >= len_s)
-		return (ft_strdup(""));
-	if (len > len_s - start)
-		len = len_s - start;
-	str = malloc(len + 1);
-	if (!str)
-		return (NULL);
-	i = 0;
-	while ((len > i) && s[start + i])
-	{
-		str[i] = s[start + i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
 char	*ft_strchr(const char *s, int c)
 {
 	while (*s)
